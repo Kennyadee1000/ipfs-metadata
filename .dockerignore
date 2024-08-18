@@ -1,0 +1,9 @@
+
+/ipfs-metadata
+
+/bin/
+/pkg/
+/vendor/
+
+.git
+.DS_Store
