@@ -3,8 +3,17 @@ variable "cluster_name" {
   type        = string
 }
 
+variable "cluster_id" {
+  description = "The ID of the ECS cluster."
+  type        = string
+}
+
 variable "service_name" {
-  description = "The service name of the ECS cluster."
+  description = "The service name of the ecs cluster."
+  type        = string
+}
+variable "task_type" {
+  description = "The type of task (e.g., app, db)."
   type        = string
 }
 
@@ -50,33 +59,13 @@ variable "container_memory" {
 variable "container_port" {
   description = "The port the container will listen on."
   type        = number
-  default     = 8080
+  default     = 80
 }
 
-variable "postgres_host" {
-  description = "The hostname of the PostgreSQL database."
-  type        = string
-}
-
-variable "postgres_port" {
-  description = "The port of the PostgreSQL database."
-  type        = string
-  default     = "5432"
-}
-
-variable "postgres_user" {
-  description = "The username for the PostgreSQL database."
-  type        = string
-}
-
-variable "postgres_password" {
-  description = "The password for the PostgreSQL database."
-  type        = string
-}
-
-variable "postgres_db" {
-  description = "The name of the PostgreSQL database."
-  type        = string
+variable "container_environment" {
+  description = "The environment variables for the container."
+  type        = list(map(string))
+  default     = []
 }
 
 variable "desired_count" {
@@ -95,7 +84,26 @@ variable "security_group_id" {
   type        = string
 }
 
+variable "assign_public_ip" {
+  description = "Whether to assign a public IP to the ECS tasks."
+  type        = bool
+  default     = true
+}
+
+variable "enable_load_balancer" {
+  description = "Whether to enable a load balancer for the ECS service."
+  type        = bool
+  default     = false
+}
+
 variable "target_group_arn" {
   description = "The ARN of the target group for the load balancer."
   type        = string
+  default     = ""
+}
+
+variable "execution_role_policy_arns" {
+  description = "The ARNs of the managed policies to attach to the execution role."
+  type        = list(string)
+  default     = ["arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"]
 }
