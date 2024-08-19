@@ -12,9 +12,6 @@ resource "aws_security_group" "web_sg" {
     cidr_blocks = [
       "0.0.0.0/0"
     ]
-    ipv6_cidr_blocks = [
-      "::/0"
-    ]
   }
 
   ingress {
@@ -78,9 +75,6 @@ resource "aws_security_group" "database_sg" {
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = [
-      "::/0"
-    ]
   }
   tags = {
     Name = "Database SG"
@@ -127,9 +121,6 @@ resource "aws_security_group" "resource_server_sg" {
     protocol    = "-1"
     cidr_blocks = [
       "0.0.0.0/0"
-    ]
-    ipv6_cidr_blocks = [
-      "::/0"
     ]
   }
   tags = {
