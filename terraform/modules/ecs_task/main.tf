@@ -18,6 +18,11 @@ resource "aws_iam_role" "task_execution_role" {
   managed_policy_arns = var.execution_role_policy_arns
 }
 
+resource "aws_cloudwatch_log_group" "ecs_log" {
+  name              = "/ecs/${var.task_type}-td-${var.environment}"
+  retention_in_days = var.logs_retention_days
+
+}
 # ECS Task Definition
 resource "aws_ecs_task_definition" "task" {
   family                   = var.task_family
@@ -34,6 +39,16 @@ resource "aws_ecs_task_definition" "task" {
       cpu       = var.container_cpu
       memory    = var.container_memory
       essential = true
+      logConfiguration : {
+        logDriver = "awslogs",
+        options   = {
+          "awslogs-group"         = "/ecs/${var.task_type}-td-${var.environment}",
+          "awslogs-region"        = var.region,
+          "awslogs-stream-prefix" = "ecs"
+        }
+      },
+
+
       portMappings = [
         {
           containerPort = var.container_port
