@@ -1,4 +1,4 @@
-name: Plan IPFS Metadata Infrastructure
+name: 02 Plan IPFS Metadata Infrastructure
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Deploy IPFS Metadata Application
+name: 04 Deploy IPFS Metadata Application
 
 on:
   workflow_dispatch:
