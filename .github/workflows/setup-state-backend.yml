@@ -44,20 +44,20 @@ jobs:
           cat <<EOF > backend.tf
           terraform {
               backend "s3" {
-              bucket = "bpa-${{ github.event.inputs.environment }}-backend-tfstate"
+              bucket = "bpt-${{ github.event.inputs.environment }}-backend-tfstate"
               profile = "${{ github.event.inputs.environment }}"
-              key = "bpa-state-file/terraform.tfstate"
+              key = "bpt-state-file/terraform.tfstate"
               region = "us-east-2"
-              dynamodb_table = "bpa-${{ github.event.inputs.environment }}-terraform-locks"
+              dynamodb_table = "bpt-${{ github.event.inputs.environment }}-terraform-locks"
               encrypt = true
               shared_credentials_files = ["~/.aws/credentials"]
             }
           }
           EOF
 
-      - name: Re-Initialize Terraform with S3 Backend
+      - name: Re-Initialize Terraform with S3 Backend and copy state to S3
         working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
-        run: terraform init -reconfigure
+        run: terraform init -reconfigure -input=false -migrate-state
 
       - name: Terraform Plan (Check Configuration)
         working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
