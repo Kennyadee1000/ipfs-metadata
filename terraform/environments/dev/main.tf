@@ -64,6 +64,8 @@ module "database_task" {
   enable_load_balancer       = false
   execution_role_policy_arns = ["arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"]
   service_name               = "ipfs-db-service"
+  environment                = var.environment
+  region                     = var.region
 }
 
 module "ipfs_task" {
@@ -93,4 +95,6 @@ module "ipfs_task" {
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   ]
   service_name = "ipfs-metadata-service"
+  environment  = var.environment
+  region       = var.region
 }

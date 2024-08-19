@@ -107,3 +107,13 @@ variable "execution_role_policy_arns" {
   type        = list(string)
   default     = ["arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"]
 }
+
+variable "environment" {
+  description = "The environment to deploy the ecs cluster."
+  type = string
+}
+
+variable "region" {
+  description = "The region to deploy the ecs cluster."
+  type = string
+}
