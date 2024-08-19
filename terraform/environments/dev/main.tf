@@ -54,9 +54,10 @@ module "database_task" {
   container_port        = 5432
   container_environment = [
     { name = "POSTGRES_DB", value = var.db_name },
-    { name = "POSTGRES_USER", value = var.db_user },
-    { name = "POSTGRES_PASSWORD", valueFrom = module.db_password.secret_location }
+    { name = "POSTGRES_USER", value = var.db_user }
+
   ]
+  secrets                    = [{ name = "POSTGRES_PASSWORD", valueFrom = module.db_password.secret_location }]
   desired_count              = 1
   subnet_ids                 = [module.vpc.private_subnet_a_id]
   security_group_id          = module.security_groups.database_sg_id
