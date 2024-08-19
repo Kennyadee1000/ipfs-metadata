@@ -62,7 +62,10 @@ module "database_task" {
   security_group_id          = module.security_groups.database_sg_id
   assign_public_ip           = false
   enable_load_balancer       = false
-  execution_role_policy_arns = ["arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"]
+  execution_role_policy_arns = [
+    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
+    "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
+  ]
   service_name               = "ipfs-db-service"
   environment                = var.environment
   region                     = var.region
@@ -92,7 +95,8 @@ module "ipfs_task" {
   target_group_arn           = module.alb.target_group_arn
   execution_role_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
-    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+    "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
   ]
   service_name = "ipfs-metadata-service"
   environment  = var.environment
