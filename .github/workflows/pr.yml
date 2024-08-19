@@ -3,7 +3,7 @@ name: Plan IPFS Metadata Infrastructure
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   planIpfsInfrastructure:
