@@ -15,7 +15,7 @@ module "alb" {
   source            = "../../modules/load_balancers"
   alb_name          = var.alb_name
   security_group_id = module.security_groups.web_sg_id
-  subnet_ids        = [module.vpc.public_subnet_a_id]
+  subnet_ids        = [module.vpc.public_subnet_a_id, module.vpc.public_subnet_b_id]
   vpc_id            = module.vpc.vpc_id
   enable_https      = var.enable_https
 }
@@ -83,7 +83,7 @@ module "ipfs_task" {
     { name = "POSTGRES_DB", value = var.db_name }
   ]
   desired_count              = 2
-  subnet_ids                 = [module.vpc.public_subnet_a_id]
+  subnet_ids                 = [module.vpc.public_subnet_a_id, module.vpc.public_subnet_b_id]
   security_group_id          = module.security_groups.resource_sg_id
   assign_public_ip           = true
   enable_load_balancer       = true
