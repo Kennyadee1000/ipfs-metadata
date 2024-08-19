@@ -20,7 +20,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
       - name: Setup Envs
         run: |
           mkdir ~/.aws
@@ -28,17 +27,19 @@ jobs:
           echo -e "${{ secrets.SHARED_CONFIG }}" >> ~/.aws/config
 
       - name: Terraform Init (Local)
-        working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
-        run: terraform init
+        run: |
+          cd terraform/terraform_backends/${{ github.event.inputs.environment }}
+          terraform init
 
 
       - name: Terraform Apply (Create State Bucket and DynamoDB)
-        working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
-        run: terraform apply -auto-approve
+        run: |
+          cd terraform/terraform_backends/${{ github.event.inputs.environment }}
+          terraform apply -auto-approve
 
       - name: Update Backend Configuration
-        working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
         run: |
+          cd terraform/terraform_backends/${{ github.event.inputs.environment }}
           # You would dynamically update your Terraform files here if needed
           echo 'Updating backend configuration...'
           cat <<EOF > backend.tf
@@ -56,17 +57,21 @@ jobs:
           EOF
 
       - name: Re-Initialize Terraform with S3 Backend
-        working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
-        run: terraform init -reconfigure
+        run: |
+          cd terraform/terraform_backends/${{ github.event.inputs.environment }}
+          terraform init -reconfigure
 
       - name: Terraform Plan (Check Configuration)
-        working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
-        run: terraform plan
+        run: |
+          cd terraform/terraform_backends/${{ github.event.inputs.environment }}
+          terraform plan
 
       - name: Terraform Apply (Final Configuration)
-        working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
-        run: terraform apply -auto-approve
+        run: |
+          cd terraform/terraform_backends/${{ github.event.inputs.environment }}
+          terraform apply -auto-approve
 
       - name: Cleanup Local State
-        working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
-        run: rm -f terraform.tfstate
+        run: |
+          cd terraform/terraform_backends/${{ github.event.inputs.environment }}
+          rm -f terraform.tfstate
