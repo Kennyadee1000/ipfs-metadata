@@ -117,3 +117,9 @@ variable "region" {
   description = "The region to deploy the ecs cluster."
   type = string
 }
+
+variable "secrets" {
+  description = "The cluster environment secret."
+  type = string
+  default = []
+}
