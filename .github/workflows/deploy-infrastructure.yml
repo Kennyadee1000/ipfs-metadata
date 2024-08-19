@@ -1,0 +1,36 @@
+name: Deploy IPFS Metadata Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select the environment to deploy infra to'
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - prod
+
+jobs:
+  deployIpfsInfrastructure:
+    name: Deploy IPFS Infrastructure
+    runs-on: ubuntu-latest
+    container: hashicorp/terraform
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Envs
+        run: |
+          mkdir ~/.aws
+          echo -e "${{ secrets.SHARED_CREDENTIALS }}" >> ~/.aws/credentials
+          echo -e "${{ secrets.SHARED_CONFIG }}" >> ~/.aws/config
+
+      - name: Terraform Init
+        working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
+        run: terraform init
+
+      - name: Terraform Apply
+        working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
+        run: terraform apply -auto-approve

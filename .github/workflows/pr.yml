@@ -1,0 +1,37 @@
+name: Plan IPFS Metadata Infrastructure
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  planIpfsInfrastructure:
+    name: Plan IPFS Infrastructure
+    runs-on: ubuntu-latest
+    container: hashicorp/terraform
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Envs
+        run: |
+          mkdir ~/.aws
+          echo -e "${{ secrets.SHARED_CREDENTIALS }}" >> ~/.aws/credentials
+          echo -e "${{ secrets.SHARED_CONFIG }}" >> ~/.aws/config
+
+      - name: Dev - Terraform Init
+        working-directory: terraform/terraform_backends/dev
+        run: terraform init
+
+      - name: Dev - Terraform Plan
+        working-directory: terraform/terraform_backends/dev
+        run: terraform plan
+
+#      - name: Prod Terraform Init
+#        working-directory: terraform/terraform_backends/prod
+#        run: terraform init
+
+#      - name: Prod Terraform Plan
+#        working-directory: terraform/terraform_backends/prod
+#        run: terraform plan
