@@ -44,13 +44,13 @@ jobs:
           cat <<EOF > backend.tf
           terraform {
               backend "s3" {
-              bucket = "bp-${{ github.event.inputs.environment }}-backend-tfstate"
+              bucket = "bpa-${{ github.event.inputs.environment }}-backend-tfstate"
               profile = "${{ github.event.inputs.environment }}"
-              key = "bp-state-file/terraform.tfstate"
+              key = "bpa-state-file/terraform.tfstate"
               region = "us-east-2"
-              dynamodb_table = "bp-${{ github.event.inputs.environment }}-terraform-locks"
+              dynamodb_table = "bpa-${{ github.event.inputs.environment }}-terraform-locks"
               encrypt = true
-              shared_credentials_file = "~/.aws/credentials"
+              shared_credentials_files = ["~/.aws/credentials"]
             }
           }
           EOF
