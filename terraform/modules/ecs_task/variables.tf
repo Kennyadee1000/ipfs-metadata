@@ -24,14 +24,14 @@ variable "task_family" {
 
 variable "cpu" {
   description = "The amount of CPU units to reserve for the task."
-  type        = string
-  default     = "256"
+  type        = number
+  default     = 256
 }
 
 variable "memory" {
   description = "The amount of memory (in MiB) to reserve for the task."
-  type        = string
-  default     = "512"
+  type        = number
+  default     = 512
 }
 
 variable "container_name" {
@@ -46,14 +46,14 @@ variable "container_image" {
 
 variable "container_cpu" {
   description = "The amount of CPU units to reserve for the container."
-  type        = string
-  default     = "256"
+  type        = number
+  default     = 256
 }
 
 variable "container_memory" {
   description = "The amount of memory (in MiB) to reserve for the container."
-  type        = string
-  default     = "512"
+  type        = number
+  default     = 512
 }
 
 variable "container_port" {
