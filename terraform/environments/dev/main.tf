@@ -55,7 +55,6 @@ module "database_task" {
   container_environment = [
     { name = "POSTGRES_DB", value = var.db_name },
     { name = "POSTGRES_USER", value = var.db_user }
-
   ]
   secrets                    = [{ name = "POSTGRES_PASSWORD", valueFrom = module.db_password.secret_location }]
   desired_count              = 1
@@ -82,9 +81,9 @@ module "ipfs_task" {
     { name = "POSTGRES_HOST", value = module.database_task.service_name },
     { name = "POSTGRES_PORT", value = "5432" },
     { name = "POSTGRES_USER", value = var.db_user },
-    { name = "POSTGRES_PASSWORD", valueFrom = module.db_password.secret_location },
     { name = "POSTGRES_DB", value = var.db_name }
   ]
+  secrets                    = [{ name = "POSTGRES_PASSWORD", valueFrom = module.db_password.secret_location }]
   desired_count              = 2
   subnet_ids                 = [module.vpc.public_subnet_a_id, module.vpc.public_subnet_b_id]
   security_group_id          = module.security_groups.resource_sg_id
