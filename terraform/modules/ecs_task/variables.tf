@@ -120,6 +120,6 @@ variable "region" {
 
 variable "secrets" {
   description = "The cluster environment secret."
-  type = string
+  type = list(any)
   default = []
 }
