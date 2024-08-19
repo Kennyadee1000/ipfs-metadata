@@ -1,11 +1,11 @@
 #terraform {
 #  backend "s3" {
-#    bucket = "bp-prod-backend-tfstate"
+#    bucket = "bpty-prod-backend-tfstate"
 #    profile = "prod"
-#    key = "bp-state-file/terraform.tfstate"
+#    key = "bpty-state-file/terraform.tfstate"
 #    region = "us-east-2"
-#    dynamodb_table = "bp-prod-terraform-locks"
+#    dynamodb_table = "bpty-prod-terraform-locks"
 #    encrypt = true
-#    shared_credentials_file = "~/.aws/credentials"
+#    shared_credentials_files = ["~/.aws/credentials"]
 #  }
 #}

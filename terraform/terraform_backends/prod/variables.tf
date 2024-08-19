@@ -1,9 +1,9 @@
 variable "state_bucket_name" {
   description = "The name of the bucket to use as state bucket."
-  default = "bp-prod-backend-tfstate"
+  default = "bpty-prod-backend-tfstate"
 }
 
 variable "dynamo_lock_table" {
   description = "The name of the table to use as state lock."
-  default = "bp-prod-terraform-locks"
+  default = "bpty-prod-terraform-locks"
 }

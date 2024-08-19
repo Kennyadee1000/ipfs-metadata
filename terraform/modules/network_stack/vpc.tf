@@ -35,8 +35,6 @@ resource "aws_subnet" "public_subnet_a" {
   tags = {
     Name                                                 = "Public A"
     Reach                                                = "public"
-    "kubernetes.io/cluster/overc-k8s-${var.environment}" = "shared"
-    "kubernetes.io/role/elb"                             = 1
   }
 }
 
@@ -51,8 +49,6 @@ resource "aws_subnet" "private_subnet_a" {
   tags = {
     Name                                                 = "Private A"
     Reach                                                = "private"
-    "kubernetes.io/cluster/overc-k8s-${var.environment}" = "shared"
-    "kubernetes.io/role/internal-elb"                    = 1
   }
 }
 
@@ -70,8 +66,6 @@ resource "aws_route_table_association" "public_a" {
   subnet_id      = aws_subnet.public_subnet_a.id
   route_table_id = aws_route_table.public.id
 }
-
-
 
 resource "aws_route" "public_internet_route" {
   route_table_id         = aws_route_table.public.id
