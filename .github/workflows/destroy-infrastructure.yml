@@ -1,0 +1,36 @@
+name: 05 Destroy IPFS Metadata Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select the environment to destroy its infra'
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - prod
+
+jobs:
+  destroyIpfsInfrastructure:
+    name: Destroying IPFS Infrastructure
+    runs-on: ubuntu-latest
+    container: hashicorp/terraform
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Envs
+        run: |
+          mkdir ~/.aws
+          echo -e "${{ secrets.SHARED_CREDENTIALS }}" >> ~/.aws/credentials
+          echo -e "${{ secrets.SHARED_CONFIG }}" >> ~/.aws/config
+
+      - name: Terraform Init
+        working-directory: terraform/environments/${{ github.event.inputs.environment }}
+        run: terraform init
+
+      - name: Terraform Destroy
+        working-directory: terraform/environments/${{ github.event.inputs.environment }}
+        run: terraform destroy -auto-approve
