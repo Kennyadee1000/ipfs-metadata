@@ -20,7 +20,7 @@ resource "aws_iam_role" "task_execution_role" {
 
 resource "aws_cloudwatch_log_group" "ecs_log" {
   name              = "/ecs/${var.task_type}-td-${var.environment}"
-  retention_in_days = var.logs_retention_days
+  retention_in_days = 3
 
 }
 # ECS Task Definition
