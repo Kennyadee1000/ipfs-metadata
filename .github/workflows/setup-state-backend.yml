@@ -31,9 +31,9 @@ jobs:
           cd terraform/terraform_backends/${{ github.event.inputs.environment }}
           terraform init
 
-
       - name: Terraform Apply (Create State Bucket and DynamoDB)
         run: |
+          cat ~/.aws/config
           cd terraform/terraform_backends/${{ github.event.inputs.environment }}
           terraform apply -auto-approve
 
