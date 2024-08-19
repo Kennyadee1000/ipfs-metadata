@@ -28,9 +28,9 @@ jobs:
           echo -e "${{ secrets.SHARED_CONFIG }}" >> ~/.aws/config
 
       - name: Terraform Init
-        working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
+        working-directory: terraform/environments/${{ github.event.inputs.environment }}
         run: terraform init
 
       - name: Terraform Apply
-        working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
+        working-directory: terraform/environments/${{ github.event.inputs.environment }}
         run: terraform apply -auto-approve

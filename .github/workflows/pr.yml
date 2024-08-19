@@ -1,7 +1,7 @@
 name: Plan IPFS Metadata Infrastructure
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -21,17 +21,17 @@ jobs:
           echo -e "${{ secrets.SHARED_CONFIG }}" >> ~/.aws/config
 
       - name: Dev - Terraform Init
-        working-directory: terraform/terraform_backends/dev
+        working-directory: terraform/environments/dev
         run: terraform init
 
       - name: Dev - Terraform Plan
-        working-directory: terraform/terraform_backends/dev
+        working-directory: terraform/environments/dev
         run: terraform plan
 
 #      - name: Prod Terraform Init
-#        working-directory: terraform/terraform_backends/prod
+#        working-directory: terraform/environments/prod
 #        run: terraform init
 
 #      - name: Prod Terraform Plan
-#        working-directory: terraform/terraform_backends/prod
+#        working-directory: terraform/environments/prod
 #        run: terraform plan
