@@ -1,4 +1,4 @@
-name: Deploy IPFS Metadata Infrastructure
+name: 03 Deploy IPFS Metadata Infrastructure
 
 on:
   workflow_dispatch:

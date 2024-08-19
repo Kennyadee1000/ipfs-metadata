@@ -1,0 +1,51 @@
+name: 04 Deploy IPFS Metadata Application
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select the environment to deploy application to'
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - prod
+
+jobs:
+  deployIpfsApplication:
+    name: Deploy IPFS Infrastructure
+    runs-on: ubuntu-latest
+    env:
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Envs
+        run: |
+          mkdir ~/.aws
+          echo -e "${{ secrets.SHARED_CREDENTIALS }}" >> ~/.aws/credentials
+          echo -e "${{ secrets.SHARED_CONFIG }}" >> ~/.aws/config
+
+      - name: Retrieve ECR Repository URL from Parameter Store
+        id: get_ecr_url
+        run: |
+          ecr_url=$(aws ssm get-parameter --name "/configuration/${{ github.event.inputs.environment }}/ecr/ipfs-metadata/repository_url" --query "Parameter.Value" --output text)
+          echo "::set-output name=ecr_url::$ecr_url"
+
+      - name: Log in to Amazon ECR
+        run: |
+          aws ecr get-login-password --region "${{ env.AWS_DEFAULT_REGION }}" --profile "${{ github.event.inputs.environment }}" | docker login --username AWS --password-stdin ${{ steps.get_ecr_url.outputs.ecr_url }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t ipfs-metadata .
+
+      - name: Tag Docker image
+        run: |
+          docker tag ipfs-metadata:latest ${{ steps.get_ecr_url.outputs.ecr_url }}:latest
+
+      - name: Push Docker image to ECR
+        run: |
+          docker push ${{ steps.get_ecr_url.outputs.ecr_url }}:latest

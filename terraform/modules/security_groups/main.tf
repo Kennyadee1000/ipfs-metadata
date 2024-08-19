@@ -44,7 +44,7 @@ resource "aws_security_group" "web_sg" {
     ]
   }
   tags = {
-    Name = "WebSG"
+    Name = "Web SG"
   }
 }
 
@@ -83,7 +83,7 @@ resource "aws_security_group" "database_sg" {
     ]
   }
   tags = {
-    Name = "DatabaseSG"
+    Name = "Database SG"
   }
 }
 
