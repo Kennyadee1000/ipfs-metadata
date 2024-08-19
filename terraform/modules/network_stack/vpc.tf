@@ -42,7 +42,7 @@ resource "aws_subnet" "public_subnet_b" {
 
   vpc_id                  = aws_vpc.base_vpc.id
   availability_zone       = data.aws_availability_zones.available_zones.names[1]
-  cidr_block              = "10.${var.vpc_subnet_number}.0.0/20"
+  cidr_block              = "10.${var.vpc_subnet_number}.32.0/20"
   ipv6_cidr_block         = cidrsubnets(aws_vpc.base_vpc.ipv6_cidr_block, 8, 8, 8, 8)[2]
   map_public_ip_on_launch = true
 
