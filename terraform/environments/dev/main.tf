@@ -50,7 +50,8 @@ module "database_task" {
   task_type             = "db"
   task_family           = "ipfs-db-task"
   container_name        = "postgres"
-  container_image       = "postgres:13"
+  container_image       = "301944180646.dkr.ecr.us-east-2.amazonaws.com/postgres:latest"
+#  container_image       = "postgres:13"
   container_port        = 5432
   container_environment = [
     { name = "POSTGRES_DB", value = var.db_name },
@@ -64,7 +65,9 @@ module "database_task" {
   enable_load_balancer       = false
   execution_role_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
-    "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
+    "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess",
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+
   ]
   service_name               = "ipfs-db-service"
   environment                = var.environment
