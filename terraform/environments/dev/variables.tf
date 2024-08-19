@@ -59,3 +59,18 @@ variable "ecr_name" {
   description = "The name of the ecr repository."
   type = string
 }
+
+variable "cluster_name" {
+  description = "The name of the ECS cluster."
+  type        = string
+}
+
+variable "db_name" {
+  description = "The name of the ECS cluster."
+  type        = string
+}
+
+variable "db_user" {
+  description = "The name of the ECS cluster."
+  type        = string
+}

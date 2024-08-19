@@ -4,3 +4,8 @@ variable "tags" {
 variable "ecr_name" {
   type = string
 }
+
+variable "environment" {
+  description = "The environment of the repository."
+  type = string
+}
