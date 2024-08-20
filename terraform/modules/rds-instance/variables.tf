@@ -65,10 +65,8 @@ variable "storage_type" {
 variable "cloudwatch_log_report" {
   type    = list(string)
   default = [
-    "audit",
-    "error",
-    "general",
-    "slowquery"
+    "postgresql",
+    "upgrade"
   ]
 }
 
