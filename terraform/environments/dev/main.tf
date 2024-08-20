@@ -40,7 +40,7 @@ module "postgres_db" {
   allocated_storage        = 20
   storage_type             = "gp2"
   engine                   = "postgres"
-  engine_version           = "16.3"
+  engine_version           = "13.13"
   environment              = var.environment
   instance_class           = "db.t3.micro"
   username                 = var.db_user
