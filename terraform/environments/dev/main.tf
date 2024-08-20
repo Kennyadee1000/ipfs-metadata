@@ -18,6 +18,7 @@ module "alb" {
   subnet_ids        = [module.vpc.public_subnet_a_id, module.vpc.public_subnet_b_id]
   vpc_id            = module.vpc.vpc_id
   enable_https      = var.enable_https
+  health_check_path = "/health"
 }
 
 module "ipfs_repo" {
