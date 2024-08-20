@@ -12,3 +12,8 @@ output "target_group_arn" {
   description = "The ARN of the target group."
   value       = aws_lb_target_group.alb_target_group.arn
 }
+
+output "alb_zone_id" {
+  description = "The zone id of the load balancer."
+  value       = aws_lb.alb.zone_id
+}

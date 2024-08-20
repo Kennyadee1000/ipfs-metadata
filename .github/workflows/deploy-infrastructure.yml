@@ -17,6 +17,7 @@ jobs:
     name: Deploy IPFS Infrastructure
     runs-on: ubuntu-latest
     container: hashicorp/terraform
+    environment: ${{ github.event.inputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -26,6 +27,12 @@ jobs:
           mkdir ~/.aws
           echo -e "${{ secrets.SHARED_CREDENTIALS }}" >> ~/.aws/credentials
           echo -e "${{ secrets.SHARED_CONFIG }}" >> ~/.aws/config
+          
+          echo -e "enable_https = \"${{ env.ENABLE_HTTPS }}\"" >> terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars
+          
+          echo -e "certificate_arn = \"${{ env.CERTIFICATE_ARN }}\"" >> terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars
+          
+          echo -e "domain_name = \"${{ env.DOMAIN_NAME }}\"" >> terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars
 
       - name: Terraform Init
         working-directory: terraform/environments/${{ github.event.inputs.environment }}
