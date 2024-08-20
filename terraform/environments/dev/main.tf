@@ -87,4 +87,5 @@ module "ipfs_task" {
   service_name = "ipfs-metadata-service"
   environment  = var.environment
   region       = var.region
+  health_url   = "http://localhost:8080/health"
 }

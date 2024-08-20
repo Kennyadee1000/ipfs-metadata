@@ -3,7 +3,7 @@ resource "aws_iam_role" "task_execution_role" {
   name = "${var.cluster_name}-${var.task_type}TaskExecutionRole"
 
   assume_role_policy = jsonencode({
-    Version = "2012-10-17",
+    Version   = "2012-10-17",
     Statement = [
       {
         Action    = "sts:AssumeRole",
@@ -47,8 +47,17 @@ resource "aws_ecs_task_definition" "task" {
           "awslogs-stream-prefix" = "ecs"
         }
       },
+      healthCheck = var.health_url != "" ? {
 
-
+        retries = 3,
+        command = [
+          "CMD-SHELL",
+          "curl -f ${var.health_url} || exit 1"
+        ],
+        timeout     = 5,
+        interval    = 30,
+        startPeriod = 30
+      } : null,
       portMappings = [
         {
           containerPort = var.container_port
@@ -56,7 +65,7 @@ resource "aws_ecs_task_definition" "task" {
         }
       ]
       environment = var.container_environment
-      secrets = var.secrets
+      secrets     = var.secrets
     }
   ])
 }
@@ -70,8 +79,8 @@ resource "aws_ecs_service" "service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = var.subnet_ids
-    security_groups = [var.security_group_id]
+    subnets          = var.subnet_ids
+    security_groups  = [var.security_group_id]
     assign_public_ip = var.assign_public_ip
   }
 
