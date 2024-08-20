@@ -31,7 +31,7 @@ func setupDB() (*sqlx.DB, error) {
     if env != "production" {
 	err := godotenv.Load()
         if err != nil {
-            log.Fatal("Error loading .env file")
+            log.Fatal("Error loading .env files")
         }
     }
 	// Get the environment variables
