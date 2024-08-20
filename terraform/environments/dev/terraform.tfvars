@@ -8,4 +8,4 @@ ecr_name          = "ipfs-metadata"
 cluster_name      = "ipfs-cluster"
 db_name           = "postgres"
 db_user           = "postgres"
-
+go_env            = "production"
