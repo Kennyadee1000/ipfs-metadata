@@ -35,7 +35,7 @@ jobs:
         id: get_ecr_url
         run: |
           ecr_url=$(aws ssm get-parameter --name "/configuration/${{ github.event.inputs.environment }}/ecr/ipfs-metadata/repository_url" --query "Parameter.Value" --output text --profile ${{ github.event.inputs.environment }})
-          echo "::set-output name=ecr_url::$ecr_url"
+          echo "ecr_url=$ecr_url" >> "$GITHUB_OUTPUT"
 
       - name: Log in to Amazon ECR
         run: |
