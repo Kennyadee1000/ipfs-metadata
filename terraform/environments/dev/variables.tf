@@ -66,7 +66,7 @@ variable "cluster_name" {
 }
 
 variable "db_name" {
-  description = "The name of the ECS cluster."
+  description = "The name of the db."
   type        = string
 }
 
