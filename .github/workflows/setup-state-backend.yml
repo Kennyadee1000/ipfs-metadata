@@ -17,6 +17,7 @@ jobs:
     name: Deploy State Bucket
     runs-on: ubuntu-latest
     container: hashicorp/terraform
+    environment: ${{ github.event.inputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

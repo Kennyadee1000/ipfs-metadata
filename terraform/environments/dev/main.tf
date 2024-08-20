@@ -90,3 +90,13 @@ module "ipfs_task" {
   region       = var.region
   health_url   = "http://localhost:8080/health"
 }
+
+module "application_route" {
+  source                = "../../modules/route53"
+  app_name              = "ipfs"
+  domain_name           = var.domain_name
+  environment           = var.environment
+  load_balance_dns_name = module.alb.alb_dns_name
+  load_balance_zone_id  = module.alb.alb_zone_id
+  enable_https          = var.enable_https
+}

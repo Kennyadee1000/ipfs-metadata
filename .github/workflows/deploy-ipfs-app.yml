@@ -16,6 +16,7 @@ jobs:
   deployIpfsApplication:
     name: Deploy IPFS Application
     runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
     env:
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
     steps:

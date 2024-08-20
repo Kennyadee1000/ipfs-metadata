@@ -79,3 +79,10 @@ variable "go_env" {
   description = "The environment where to retrieve the go env vars."
   type        = string
 }
+
+variable "domain_name" {
+  description = "The domain name of the hosted zone where the application is being deployed."
+  type        = string
+  default = ""
+}
+
