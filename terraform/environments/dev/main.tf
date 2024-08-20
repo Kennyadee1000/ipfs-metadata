@@ -69,7 +69,8 @@ module "ipfs_task" {
     { name = "POSTGRES_HOST", value = module.postgres_db.rds_address },
     { name = "POSTGRES_PORT", value = "5432" },
     { name = "POSTGRES_USER", value = var.db_user },
-    { name = "POSTGRES_DB", value = var.db_name }
+    { name = "POSTGRES_DB", value = var.db_name },
+    { name = "GO_ENV", value = var.go_env },
   ]
   secrets                    = [{ name = "POSTGRES_PASSWORD", valueFrom = module.postgres_db.rds_password_location }]
   desired_count              = 2

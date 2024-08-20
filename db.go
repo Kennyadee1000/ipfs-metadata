@@ -25,11 +25,14 @@ type NFTMetadata struct {
 
 func setupDB() (*sqlx.DB, error) {
 	// Load environment variables from .env file
+	//Conditionally load the env file if app is not running in prod
+    env := os.Getenv("GO_ENV")
+    if env != "production" {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-
+}
 	// Get the environment variables
 	user := os.Getenv("POSTGRES_USER")
 	password := os.Getenv("POSTGRES_PASSWORD")

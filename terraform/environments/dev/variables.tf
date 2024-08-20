@@ -74,3 +74,8 @@ variable "db_user" {
   description = "The name of the ECS cluster."
   type        = string
 }
+
+variable "go_env" {
+  description = "The environment where to retrieve the go env vars."
+  type        = string
+}
