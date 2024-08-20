@@ -110,16 +110,21 @@ variable "execution_role_policy_arns" {
 
 variable "environment" {
   description = "The environment to deploy the ecs cluster."
-  type = string
+  type        = string
 }
 
 variable "region" {
   description = "The region to deploy the ecs cluster."
-  type = string
+  type        = string
 }
 
 variable "secrets" {
   description = "The cluster environment secret."
-  type = list(any)
-  default = []
+  type        = list(any)
+  default     = []
+}
+
+variable "health_url" {
+  description = "The ecs healthcheck path."
+  type = string
 }

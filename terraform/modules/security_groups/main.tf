@@ -5,9 +5,18 @@ resource "aws_security_group" "web_sg" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "Allow tcp access on port 3000"
+    description = "Allow tcp access on port 8080"
     from_port   = 8080
     to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = [
+      "0.0.0.0/0"
+    ]
+  }
+  ingress {
+    description = "Allow tcp access on port 80"
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = [
       "0.0.0.0/0"
@@ -87,9 +96,18 @@ resource "aws_security_group" "resource_server_sg" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description     = "Allow tcp access on port 3000"
+    description     = "Allow tcp access on port 8080"
     from_port       = 8080
     to_port         = 8080
+    protocol        = "tcp"
+    security_groups = [
+      aws_security_group.web_sg.id
+    ]
+  }
+  ingress {
+    description     = "Allow tcp access on port 80"
+    from_port       = 80
+    to_port         = 80
     protocol        = "tcp"
     security_groups = [
       aws_security_group.web_sg.id
