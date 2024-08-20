@@ -52,7 +52,7 @@ module "postgres_db" {
   region                   = var.region
   infra_param_root         = "/configuration/${var.environment}"
   vpc_security_group_ids   = [module.security_groups.database_sg_id]
-  subnet_ids               = [module.vpc.private_subnet_a_id]
+  subnet_ids               = [module.vpc.private_subnet_a_id, module.vpc.private_subnet_b_id]
   db_name                  = var.db_name
 }
 
@@ -71,7 +71,7 @@ module "ipfs_task" {
     { name = "POSTGRES_USER", value = var.db_user },
     { name = "POSTGRES_DB", value = var.db_name }
   ]
-  secrets                    = [{ name = "POSTGRES_PASSWORD", valueFrom = module.postgres_db.rds_password_location}]
+  secrets                    = [{ name = "POSTGRES_PASSWORD", valueFrom = module.postgres_db.rds_password_location }]
   desired_count              = 2
   subnet_ids                 = [module.vpc.public_subnet_a_id, module.vpc.public_subnet_b_id]
   security_group_id          = module.security_groups.resource_sg_id

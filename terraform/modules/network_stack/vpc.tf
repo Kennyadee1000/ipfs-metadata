@@ -66,6 +66,18 @@ resource "aws_subnet" "private_subnet_a" {
   }
 }
 
+resource "aws_subnet" "private_subnet_b" {
+  vpc_id                          = aws_vpc.base_vpc.id
+  availability_zone               = data.aws_availability_zones.available_zones.names[1]
+  cidr_block                      = "10.${var.vpc_subnet_number}.48.0/20"
+  ipv6_cidr_block                 = cidrsubnets(aws_vpc.base_vpc.ipv6_cidr_block, 8, 8, 8, 8)[3]
+  assign_ipv6_address_on_creation = false
+
+  tags = {
+    Name                                                 = "Private B"
+    Reach                                                = "private"
+  }
+}
 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.base_vpc.id
@@ -120,6 +132,11 @@ resource "aws_network_acl_association" "public_b" {
 resource "aws_network_acl_association" "private_a" {
   network_acl_id = aws_network_acl.network_acl_private.id
   subnet_id      = aws_subnet.private_subnet_a.id
+}
+
+resource "aws_network_acl_association" "private_b" {
+  network_acl_id = aws_network_acl.network_acl_private.id
+  subnet_id      = aws_subnet.private_subnet_b.id
 }
 
 
