@@ -1,11 +1,15 @@
 #Using base image for the version in the go.mod file
 FROM golang:1.21.11-alpine
 
+RUN apk --no-cache add curl
 
 WORKDIR /app
 
 #Copying appropriate files to container
 COPY go.mod go.sum ./
+
+RUN go mod tidy
+
 RUN go mod download
 
 COPY . .
