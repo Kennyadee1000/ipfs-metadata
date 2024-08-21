@@ -33,7 +33,7 @@ jobs:
               backend "s3" {
               bucket = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-backend-tfstate"
               profile = "${{ github.event.inputs.environment }}"
-              key = "state-file/terraform.tfstate"
+              key = "${{ vars.STATE_BUCKET_PREFIX }}-state-file/terraform.tfstate"
               region = "${{ secrets.AWS_DEFAULT_REGION }}"
               dynamodb_table = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-terraform-locks"
               encrypt = true
@@ -68,7 +68,7 @@ jobs:
               backend "s3" {
               bucket = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-backend-tfstate"
               profile = "${{ github.event.inputs.environment }}"
-              key = "state-file/terraform.tfstate"
+              key = "${{ vars.STATE_BUCKET_PREFIX }}-state-file/terraform.tfstate"
               region = "${{ secrets.AWS_DEFAULT_REGION }}"
               dynamodb_table = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-terraform-locks"
               encrypt = true
