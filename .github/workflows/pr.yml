@@ -15,6 +15,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Create backend file
+        if: ${{ vars.DEPLOY_NEW_STATE == 'false' }}
+        working-directory: terraform/environments/dev
+        run: |
+          echo 'Updating backend configuration...'
+          cat <<EOF > backend.tf
+          terraform {
+              backend "s3" {
+              bucket = "${{ vars.STATE_BUCKET_PREFIX }}-dev-backend-tfstate"
+              profile = "dev"
+              key = "${{ vars.STATE_BUCKET_PREFIX }}-dev-cluster/terraform.tfstate"
+              region = "${{ secrets.AWS_DEFAULT_REGION }}"
+              dynamodb_table = "${{ vars.STATE_BUCKET_PREFIX }}-dev-terraform-locks"
+              encrypt = true
+              shared_credentials_files = ["~/.aws/credentials"]
+            }
+          }
+          EOF
+
       - name: Setup Envs
         run: |
           mkdir ~/.aws
@@ -50,6 +69,24 @@ jobs:
 #      - name: Checkout code
 #        uses: actions/checkout@v3
 #
+#      - name: Create backend file
+#        if: ${{ vars.DEPLOY_NEW_STATE == 'false' }}
+#        working-directory: terraform/environments/prod
+#        run: |
+#          echo 'Updating backend configuration...'
+#          cat <<EOF > backend.tf
+#          terraform {
+#              backend "s3" {
+#              bucket = "${{ vars.STATE_BUCKET_PREFIX }}-prod-backend-tfstate"
+#              profile = "prod"
+#              key = "${{ vars.STATE_BUCKET_PREFIX }}-prod-cluster/terraform.tfstate"
+#              region = "${{ secrets.AWS_DEFAULT_REGION }}"
+#              dynamodb_table = "${{ vars.STATE_BUCKET_PREFIX }}-prod-terraform-locks"
+#              encrypt = true
+#              shared_credentials_files = ["~/.aws/credentials"]
+#            }
+#          }
+#          EOF
 #      - name: Setup Envs
 #        run: |
 #          mkdir ~/.aws
