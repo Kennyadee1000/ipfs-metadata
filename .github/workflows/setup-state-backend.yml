@@ -46,6 +46,10 @@ jobs:
           mkdir ~/.aws
           echo -e "${{ secrets.SHARED_CREDENTIALS }}" >> ~/.aws/credentials
           echo -e "${{ secrets.SHARED_CONFIG }}" >> ~/.aws/config
+          
+          echo -e "state_bucket_name = \"${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-backend-tfstate\"" >> terraform/terraform_backends/${{ github.event.inputs.environment }}/terraform.tfvars
+          
+          echo -e "dynamo_lock_table = \"${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-terraform-locks\"" >> terraform/terraform_backends/${{ github.event.inputs.environment }}/terraform.tfvars
 
       - name: Terraform Init (Local)
         working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
