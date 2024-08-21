@@ -63,6 +63,17 @@ jobs:
         working-directory: terraform/environments/${{ github.event.inputs.environment }}
         run: terraform init
 
+      - name: Force Delete ECR Images
+        working-directory: terraform/environments/${{ github.event.inputs.environment }}
+        run: |
+          ecr_name=$(aws ssm get-parameter --name "/configuration/${{ github.event.inputs.environment }}/ecr/repository_name" --query "Parameter.Value" --output text --profile ${{ github.event.inputs.environment }} --region "${{ vars.AWS_DEFAULT_REGION }}")
+          aws ecr list-images --repository-name $ecr_name --query 'imageIds[*]' --output json --profile ${{ github.event.inputs.environment }} | \
+          jq '. | map({"imageDigest": .imageDigest})' | \
+          jq -c '.[]' | \
+          while read image; do
+            aws ecr batch-delete-image --repository-name $ecr_name --profile ${{ github.event.inputs.environment }} --region "${{ vars.AWS_DEFAULT_REGION }}" --image-ids "$image";
+          done
+
       - name: Terraform Destroy
         working-directory: terraform/environments/${{ github.event.inputs.environment }}
         run: terraform destroy -auto-approve
