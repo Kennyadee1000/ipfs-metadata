@@ -19,6 +19,7 @@ module "alb" {
   vpc_id            = module.vpc.vpc_id
   enable_https      = var.enable_https
   health_check_path = "/health"
+  certificate_arn   = var.certificate_arn
 }
 
 module "ipfs_repo" {
