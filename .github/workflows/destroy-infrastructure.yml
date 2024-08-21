@@ -13,9 +13,38 @@ on:
           - prod
 
 jobs:
+  deleteEcrImages:
+    name: Delete ECR Images
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+      env:
+        AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+
+        - name: Run AWS CLI in Container
+          container: amazon/aws-cli:2.13.9
+          run: |
+            mkdir ~/.aws
+            echo -e "${{ secrets.SHARED_CREDENTIALS }}" >> ~/.aws/credentials
+            echo -e "${{ secrets.SHARED_CONFIG }}" >> ~/.aws/config
+
+        - name: Force Delete ECR Images
+          container: amazon/aws-cli:2.13.9
+          run: |
+            ecr_name=$(aws ssm get-parameter --name "/configuration/${{ github.event.inputs.environment }}/ecr/repository_name" --query "Parameter.Value" --output text --profile ${{ github.event.inputs.environment }} --region "${{ vars.AWS_DEFAULT_REGION }}")
+            aws ecr list-images --repository-name $ecr_name --query 'imageIds[*]' --output json --profile ${{ github.event.inputs.environment }} | \
+            jq '. | map({"imageDigest": .imageDigest})' | \
+            jq -c '.[]' | \
+            while read image; do
+            aws ecr batch-delete-image --repository-name $ecr_name --profile ${{ github.event.inputs.environment }} --region "${{ vars.AWS_DEFAULT_REGION }}" --image-ids "$image";
+            done
+
   destroyIpfsInfrastructure:
     name: Destroying IPFS Infrastructure
     runs-on: ubuntu-latest
+    needs: deleteEcrImages
     container: hashicorp/terraform
     environment: ${{ github.event.inputs.environment }}
     steps:
@@ -62,17 +91,6 @@ jobs:
       - name: Terraform Init
         working-directory: terraform/environments/${{ github.event.inputs.environment }}
         run: terraform init
-
-      - name: Force Delete ECR Images
-        working-directory: terraform/environments/${{ github.event.inputs.environment }}
-        run: |
-          ecr_name=$(aws ssm get-parameter --name "/configuration/${{ github.event.inputs.environment }}/ecr/repository_name" --query "Parameter.Value" --output text --profile ${{ github.event.inputs.environment }} --region "${{ vars.AWS_DEFAULT_REGION }}")
-          aws ecr list-images --repository-name $ecr_name --query 'imageIds[*]' --output json --profile ${{ github.event.inputs.environment }} | \
-          jq '. | map({"imageDigest": .imageDigest})' | \
-          jq -c '.[]' | \
-          while read image; do
-            aws ecr batch-delete-image --repository-name $ecr_name --profile ${{ github.event.inputs.environment }} --region "${{ vars.AWS_DEFAULT_REGION }}" --image-ids "$image";
-          done
 
       - name: Terraform Destroy
         working-directory: terraform/environments/${{ github.event.inputs.environment }}
