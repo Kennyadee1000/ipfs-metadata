@@ -26,7 +26,7 @@ jobs:
               bucket = "${{ vars.STATE_BUCKET_PREFIX }}-dev-backend-tfstate"
               profile = "dev"
               key = "${{ vars.STATE_BUCKET_PREFIX }}-dev-cluster/terraform.tfstate"
-              region = "${{ secrets.AWS_DEFAULT_REGION }}"
+              region = "${{ vars.AWS_DEFAULT_REGION }}"
               dynamodb_table = "${{ vars.STATE_BUCKET_PREFIX }}-dev-terraform-locks"
               encrypt = true
               shared_credentials_files = ["~/.aws/credentials"]
@@ -51,6 +51,7 @@ jobs:
           
           echo -e "domain_name = \"${{ vars.DOMAIN_NAME }}\"" >> terraform/environments/dev/terraform.tfvars
 
+          echo -e "region = \"${{ vars.AWS_DEFAULT_REGION }}\"" >> terraform/environments/dev/terraform.tfvars
 
       - name: Dev - Terraform Init
         working-directory: terraform/environments/dev
@@ -80,7 +81,7 @@ jobs:
 #              bucket = "${{ vars.STATE_BUCKET_PREFIX }}-prod-backend-tfstate"
 #              profile = "prod"
 #              key = "${{ vars.STATE_BUCKET_PREFIX }}-prod-cluster/terraform.tfstate"
-#              region = "${{ secrets.AWS_DEFAULT_REGION }}"
+#              region = "${{ vars.AWS_DEFAULT_REGION }}"
 #              dynamodb_table = "${{ vars.STATE_BUCKET_PREFIX }}-prod-terraform-locks"
 #              encrypt = true
 #              shared_credentials_files = ["~/.aws/credentials"]
@@ -103,6 +104,8 @@ jobs:
 #          echo -e "certificate_arn = \"${{ vars.CERTIFICATE_ARN }}\"" >> terraform/environments/prod/terraform.tfvars
 #
 #          echo -e "domain_name = \"${{ vars.DOMAIN_NAME }}\"" >> terraform/environments/prod/terraform.tfvars
+#
+#          echo -e "region = \"${{ vars.AWS_DEFAULT_REGION }}\"" >> terraform/environments/prod/terraform.tfvars
 #
 #      - name: Prod - Terraform Init
 #        working-directory: terraform/environments/prod

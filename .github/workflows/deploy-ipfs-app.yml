@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     env:
-      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
