@@ -16,6 +16,7 @@ jobs:
   deleteEcrImages:
     name: Delete ECR Images
     runs-on: ubuntu-latest
+    container: amazon/aws-cli:2.13.9
     environment: ${{ github.event.inputs.environment }}
     env:
       AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
@@ -24,14 +25,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run AWS CLI in Container
-        container: amazon/aws-cli:2.13.9
         run: |
           mkdir ~/.aws
           echo -e "${{ secrets.SHARED_CREDENTIALS }}" >> ~/.aws/credentials
           echo -e "${{ secrets.SHARED_CONFIG }}" >> ~/.aws/config
 
       - name: Force Delete ECR Images
-        container: amazon/aws-cli:2.13.9
         run: |
           ecr_name=$(aws ssm get-parameter --name "/configuration/${{ github.event.inputs.environment }}/ecr/repository_name" --query "Parameter.Value" --output text --profile ${{ github.event.inputs.environment }} --region "${{ vars.AWS_DEFAULT_REGION }}")
           aws ecr list-images --repository-name $ecr_name --query 'imageIds[*]' --output json --profile ${{ github.event.inputs.environment }} | \
