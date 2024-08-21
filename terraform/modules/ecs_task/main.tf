@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "task" {
       name      = var.container_name
       image     = var.container_image
       cpu       = var.container_cpu
-      memory    = var.container_memory
+      memoryReservation    = var.container_memory
       essential = true
       logConfiguration : {
         logDriver = "awslogs",
