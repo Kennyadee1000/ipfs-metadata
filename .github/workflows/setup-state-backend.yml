@@ -22,6 +22,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Create backend files
+        if: ${{ vars.DEPLOY_NEW_STATE = "false" }}
+        working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
+        run: |
+          # You would dynamically update your Terraform files here if needed
+          echo 'Updating backend configuration...'
+          cat <<EOF > backend.tf
+          terraform {
+              backend "s3" {
+              bucket = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-backend-tfstate"
+              profile = "${{ github.event.inputs.environment }}"
+              key = "state-file/terraform.tfstate"
+              region = "${{ secrets.AWS_DEFAULT_REGION }}"
+              dynamodb_table = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-terraform-locks"
+              encrypt = true
+              shared_credentials_files = ["~/.aws/credentials"]
+            }
+          }
+          EOF
+
       - name: Setup Envs
         run: |
           mkdir ~/.aws
@@ -49,7 +69,7 @@ jobs:
               bucket = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-backend-tfstate"
               profile = "${{ github.event.inputs.environment }}"
               key = "state-file/terraform.tfstate"
-              region = "us-east-2"
+              region = "${{ secrets.AWS_DEFAULT_REGION }}"
               dynamodb_table = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-terraform-locks"
               encrypt = true
               shared_credentials_files = ["~/.aws/credentials"]
