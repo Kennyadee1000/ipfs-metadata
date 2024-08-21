@@ -22,6 +22,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Create backend file
+        if: ${{ vars.DEPLOY_NEW_STATE == 'false' }}
+        working-directory: terraform/environments/${{ github.event.inputs.environment }}
+        run: |
+          echo 'Updating backend configuration...'
+          cat <<EOF > backend.tf
+          terraform {
+              backend "s3" {
+              bucket = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-backend-tfstate"
+              profile = "${{ github.event.inputs.environment }}"
+              key = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-cluster/terraform.tfstate"
+              region = "${{ secrets.AWS_DEFAULT_REGION }}"
+              dynamodb_table = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-terraform-locks"
+              encrypt = true
+              shared_credentials_files = ["~/.aws/credentials"]
+            }
+          }
+          EOF
       - name: Setup Envs
         run: |
           mkdir ~/.aws

@@ -22,11 +22,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Create backend files
+      - name: Create backend file
         if: ${{ vars.DEPLOY_NEW_STATE == 'false' }}
         working-directory: terraform/terraform_backends/${{ github.event.inputs.environment }}
         run: |
-          # You would dynamically update your Terraform files here if needed
           echo 'Updating backend configuration...'
           cat <<EOF > backend.tf
           terraform {

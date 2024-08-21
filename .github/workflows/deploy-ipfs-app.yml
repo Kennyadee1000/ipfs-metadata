@@ -32,18 +32,6 @@ jobs:
           echo -e "${{ secrets.SHARED_CREDENTIALS }}" >> ~/.aws/credentials
           echo -e "${{ secrets.SHARED_CONFIG }}" >> ~/.aws/config
 
-          if [ "${{ vars.ENABLE_HTTPS }}" = "true" ]; then
-            enable_https=true
-          else
-            enable_https=false
-          fi
-          echo "enable_https = ${enable_https}" >> terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars
-          
-          echo -e "certificate_arn = \"${{ vars.CERTIFICATE_ARN }}\"" >> terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars
-          
-          echo -e "domain_name = \"${{ vars.DOMAIN_NAME }}\"" >> terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars
-
-
       - name: Retrieve ECR Repository URL from Parameter Store
         id: get_ecr_url
         run: |
