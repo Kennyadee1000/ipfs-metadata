@@ -33,7 +33,7 @@ jobs:
               bucket = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-backend-tfstate"
               profile = "${{ github.event.inputs.environment }}"
               key = "${{ vars.STATE_BUCKET_PREFIX }}-state-file/terraform.tfstate"
-              region = "${{ secrets.AWS_DEFAULT_REGION }}"
+              region = "${{ vars.AWS_DEFAULT_REGION }}"
               dynamodb_table = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-terraform-locks"
               encrypt = true
               shared_credentials_files = ["~/.aws/credentials"]
@@ -68,7 +68,7 @@ jobs:
               bucket = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-backend-tfstate"
               profile = "${{ github.event.inputs.environment }}"
               key = "${{ vars.STATE_BUCKET_PREFIX }}-state-file/terraform.tfstate"
-              region = "${{ secrets.AWS_DEFAULT_REGION }}"
+              region = "${{ vars.AWS_DEFAULT_REGION }}"
               dynamodb_table = "${{ vars.STATE_BUCKET_PREFIX }}-${{ github.event.inputs.environment }}-terraform-locks"
               encrypt = true
               shared_credentials_files = ["~/.aws/credentials"]

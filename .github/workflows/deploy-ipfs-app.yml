@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     env:
-      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -35,7 +35,7 @@ jobs:
       - name: Retrieve ECR Repository URL from Parameter Store
         id: get_ecr_url
         run: |
-          ecr_url=$(aws ssm get-parameter --name "/configuration/${{ github.event.inputs.environment }}/ecr/ipfs-metadata/repository_url" --query "Parameter.Value" --output text --profile ${{ github.event.inputs.environment }})
+          ecr_url=$(aws ssm get-parameter --name "/configuration/${{ github.event.inputs.environment }}/ecr/ipfs-metadata/repository_url" --query "Parameter.Value" --output text --profile ${{ github.event.inputs.environment }} --region "${{ env.AWS_DEFAULT_REGION }}")
           echo "ecr_url=$ecr_url" >> "$GITHUB_OUTPUT"
 
       - name: Log in to Amazon ECR
