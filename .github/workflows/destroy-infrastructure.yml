@@ -16,7 +16,6 @@ jobs:
   deleteEcrImages:
     name: Delete ECR Images
     runs-on: ubuntu-latest
-    container: amazon/aws-cli:2.13.9
     environment: ${{ github.event.inputs.environment }}
     env:
       AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
@@ -24,7 +23,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Run AWS CLI in Container
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Setup Envs
         run: |
           mkdir ~/.aws
           echo -e "${{ secrets.SHARED_CREDENTIALS }}" >> ~/.aws/credentials
