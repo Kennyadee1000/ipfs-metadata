@@ -47,13 +47,13 @@ variable "container_image" {
 variable "container_cpu" {
   description = "The amount of CPU units to reserve for the container."
   type        = number
-  default     = 256
+  default     = 0
 }
 
 variable "container_memory" {
   description = "The amount of memory (in MiB) to reserve for the container."
   type        = number
-  default     = 512
+  default     = 128
 }
 
 variable "container_port" {
